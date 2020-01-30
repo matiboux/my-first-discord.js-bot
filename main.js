@@ -11,13 +11,21 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
-	if (msg.content === `${prefix}ping`) {
+	if (!msg.content.startsWith(prefix) || msg.author.bot) return;
+
+	const args = msg.content.slice(prefix.length).split(' ');
+	const command = args.shift().toLowerCase();
+	
+	if (command === 'ping') {
 		msg.channel.send('Pong.');
-	} else if (msg.content === `${prefix}beep`) {
+	}
+	else if (command === 'beep') {
 		msg.channel.send('Boop.');
-	} else if (msg.content === `${prefix}server`) {
+	}
+	else if (command === 'server') {
 		msg.channel.send(`Server name: ${msg.guild.name}\nTotal members: ${msg.guild.memberCount}`);
-	} else if (msg.content === `${prefix}user-info`) {
+	}
+	else if (command === 'user-info') {
 		msg.channel.send(`Your username: ${msg.author.username}\nYour ID: ${msg.author.id}`);
 	}
 });
