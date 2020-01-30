@@ -1,0 +1,16 @@
+{
+	"name": "my-first-discord.js-bot",
+	"version": "1.0.0",
+	"description": "My first Discord bot using the Discord.js library",
+	"main": "main.js",
+	"scripts": {
+		"start": "node .",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": "https://github.com/matiboux/my-first-discord.js-bot",
+	"author": "Matiboux",
+	"license": "",
+	"devDependencies": {
+		"discord.js": "^11.5.1"
+	}
+}
