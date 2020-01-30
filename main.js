@@ -13,7 +13,7 @@ client.on('ready', () => {
 client.on('message', msg => {
 	if (!msg.content.startsWith(prefix) || msg.author.bot) return;
 
-	const args = msg.content.slice(prefix.length).split(' ');
+	const args = msg.content.slice(prefix.length).split(/ +/);
 	const command = args.shift().toLowerCase();
 	
 	if (command === 'ping') {
@@ -27,6 +27,13 @@ client.on('message', msg => {
 	}
 	else if (command === 'user-info') {
 		msg.channel.send(`Your username: ${msg.author.username}\nYour ID: ${msg.author.id}`);
+	}
+	else if (command === 'args-info') {
+		if (!args.length) {
+			return msg.channel.send(`You didn't provide any arguments, ${msg.author}!`);
+		}
+
+		msg.channel.send(`Arguments (${args.length}): ${args}`);
 	}
 });
 
