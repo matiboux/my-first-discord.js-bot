@@ -11,6 +11,6 @@
 	"author": "Matiboux",
 	"license": "MIT",
 	"devDependencies": {
-		"discord.js": "^11.5.1"
+		"discord.js": "github:discordjs/discord.js"
 	}
 }
