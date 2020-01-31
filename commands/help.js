@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 const { prefix } = require('../config.json');
 
 module.exports = {
@@ -7,12 +8,12 @@ module.exports = {
 	usage: '[command name]',
 	cooldown: 5,
 	execute(message, args) {
-		const data = [];
 		const { commands } = message.client;
 
 		if (!args.length) {
+			const data = [];
 			data.push('Here\'s a list of all my commands:');
-			data.push(commands.map(command => command.name).join(', '));
+			data.push(commands.map(command => `\`${command.name}\``).join(', '));
 			data.push(`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`);
 
 			return message.author.send(data, { split: true })
@@ -26,21 +27,25 @@ module.exports = {
 				});
 		}
 		
-		const name = args[0].toLowerCase();
-		const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
+		const commandName = args[0].toLowerCase();
+		const command = commands.get(commandName)
+			|| commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
-		if (!command) {
-			return message.reply('that\'s not a valid command!');
-		}
+		if (!command) return message.reply('that\'s not a valid command!');
+		
+		const messageEmbed = new Discord.MessageEmbed()
+			.setColor('#808080')
+			.setTitle(`Command: ${command.name}`)
+			.setFooter('MatiBot');
+			
+		if (command.aliases) messageEmbed.addField('Aliases', command.aliases.join(', '));
+		if (command.description) messageEmbed.setDescription(command.description);
+		if (command.usage) messageEmbed.addField('Usage', `${prefix}${command.name} ${command.usage}`);
+		
+		messageEmbed.addField('Arguments required?', command.args ? 'Yes' : 'No', true);
+		messageEmbed.addField('Is server-only?', command.guildOnly ? 'Yes' : 'No', true);
+		messageEmbed.addField('Cooldown', `${command.cooldown || 3} second(s)`);
 
-		data.push(`**Name:** ${command.name}`);
-
-		if (command.aliases) data.push(`**Aliases:** ${command.aliases.join(', ')}`);
-		if (command.description) data.push(`**Description:** ${command.description}`);
-		if (command.usage) data.push(`**Usage:** ${prefix}${command.name} ${command.usage}`);
-
-		data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`);
-
-		message.channel.send(data, { split: true });
+		message.channel.send(messageEmbed);
 	},
 };
