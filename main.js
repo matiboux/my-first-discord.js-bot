@@ -35,23 +35,23 @@ client.on('message', message => {
 	const command = client.commands.get(commandName)
 		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 	
-	if(!command) return;
+	if (!command) return;
 	
 	if (command.guildOnly && message.channel.type !== 'text')
 		return message.reply('I can\'t execute that command inside DMs!');
 	if (command.args && !args.length) {
-		let reply = `You didn't provide any arguments, ${message.author}!`;
-
-		if (command.usage) {
-			reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
-		}
+		const reply = [];
+		
+		reply.push(`You didn't provide any arguments, ${message.author}!`);
+		
+		if (command.usage)
+			reply.push(`\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``);
 
 		return message.channel.send(reply);
 	}
 	
-	if (!cooldowns.has(command.name)) {
+	if (!cooldowns.has(command.name))
 		cooldowns.set(command.name, new Discord.Collection());
-	}
 
 	const now = Date.now();
 	const timestamps = cooldowns.get(command.name);
