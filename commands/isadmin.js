@@ -12,7 +12,7 @@ module.exports = {
 			return message.reply('You are not an Administrator.');
 		}
 
-		const member = message.mentions.members[0];
+		const member = message.mentions.members.first();
 
 		if (message.mentions.members.every(member => member.hasPermission('ADMINISTRATOR')))
 			return message.reply('They are an Administrator!');
