@@ -37,8 +37,10 @@ client.on('message', message => {
 	
 	if (!command) return;
 	
-	if (command.guildOnly && message.channel.type !== 'text')
+	if ((command.guildOnly || command.adminOnly) && message.channel.type !== 'text')
 		return message.reply('I can\'t execute that command inside DMs!');
+	if (command.adminOnly && message.member && !message.member.hasPermission('ADMINISTRATOR'))
+		return message.reply('Only an Administrator can execute that command.');
 	if (command.args && !args.length) {
 		const reply = [];
 		
